@@ -1,0 +1,9 @@
+---
+sshd_config_file_path: /etc/ssh
+
+sshd_config_file_name: sshd_config
+
+sshd_service_name: sshd
+
+#This will be enabled in task if custom port and selinux are enabled
+custom_port_and_selinux_enabled: disabled

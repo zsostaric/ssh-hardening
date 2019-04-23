@@ -1,0 +1,10 @@
+---
+- name: getting selinux status
+  command: getenforce
+  register: sestatus
+  failed_when: false
+  changed_when: false
+  
+- name: setting custom variable if custom ssh port and selinux enabled
+  set_fact: custom_port_and_selinux_enabled="enabled"
+  when: ("Enforcing" in sestatus.stdout or "Permissive" in sestatus.stdout) and sshd_port != 22

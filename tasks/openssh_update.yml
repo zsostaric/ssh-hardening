@@ -1,0 +1,5 @@
+--- 
+- name: install the latest version of openssh
+  yum:
+    name: openssh
+    state: latest

@@ -1,0 +1,30 @@
+---
+#sshd port. Default is 22. If set to custom port, selinux semanage command will be triggered and a new firewall rule will be added
+sshd_port: 2244
+
+#The time after which the server disconnects if the user has not successfully logged in
+sshd_login_grace_time: 60
+
+#Specifies the maximum number of authentication attempts permitted per connection
+sshd_max_auth_tries: 3
+
+#Specifies the maximum number of open shell, login or subsystem sessions permitted per network connection
+sshd_max_sessions: 10
+
+#Specifies whether ssh-agent forwarding is permitted.
+sshd_allow_agent_forwarding: "yes"
+
+#Specifies whether TCP forwarding is permitted
+sshd_allow_tcp_forwarding: "yes"
+
+#Sets a timeout interval in seconds after which if no data has been received from the client, sshd will send a message through the encrypted channel to request a response from the client
+sshd_client_alive_interval: 300
+
+#Sets the number of client alive messages which may be sent without sshd receiving any messages back from the client. If this threshold is reached while client alive messages are being sent, sshd will disconnect the client
+sshd_client_alive_count_max: 2
+
+#Specifies which address family should be used by sshd. Valid arguments are any (the default), inet (use IPv4 only), or inet6 (use IPv6 only)
+sshd_address_family: inet
+
+#Specifies the local addresses sshd should listen on. 
+sshd_listen_address: 0.0.0.0

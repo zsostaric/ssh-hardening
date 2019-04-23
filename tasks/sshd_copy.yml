@@ -1,0 +1,12 @@
+---
+#copy hardened sshd config file to remote server and create backup
+
+- name: copy {{sshd_config_file_name}} to {{sshd_config_file_path}}/{{sshd_config_file_name}}
+  template:
+    src: sshd_config.j2
+    dest: "{{sshd_config_file_path}}/{{sshd_config_file_name}}"
+    owner: "root"
+    group: "root"
+    mode: 0600
+    backup: yes
+  notify: restart sshd service

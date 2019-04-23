@@ -1,0 +1,184 @@
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+
+#Supported HostKey algorithms by order of preference - recommended by https://infosec.mozilla.org/guidelines/openssh
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+
+#KexAlgorithms - recommended by https://infosec.mozilla.org/guidelines/openssh
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+
+#Ciphers - recommended by https://infosec.mozilla.org/guidelines/openssh
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+#MAC - recommended by https://infosec.mozilla.org/guidelines/openssh
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+
+#sshd port. Default is 22. If set to custom port, selinux semanage command will be triggered and a new firewall rule will be added
+Port {{sshd_port}}
+
+#Specifies which address family should be used by sshd. Valid arguments are any (the default), inet (use IPv4 only), or inet6 (use IPv6 only)
+AddressFamily {{sshd_address_family}}
+
+#Specifies the local addresses sshd should listen on. 
+ListenAddress {{sshd_listen_address}}
+
+#Permit user root to login via ssh
+PermitRootLogin no
+
+#The time after which the server disconnects if the user has not successfully logged in
+LoginGraceTime {{sshd_login_grace_time}}
+
+#Specifies whether sshd should check file modes and ownership of the user's files and home directory before accepting login
+StrictModes yes
+
+#Specifies the maximum number of authentication attempts permitted per connection
+MaxAuthTries {{sshd_max_auth_tries}}
+
+#Specifies the maximum number of open shell, login or subsystem sessions permitted per network connection
+MaxSessions {{sshd_max_sessions}}
+
+#Always use protocol 2 (do not fallback to legacy protocol 1)
+Protocol 2
+
+#Password based logins are disabled - only public key based logins are allowed.
+AuthenticationMethods publickey
+
+#Check only .ssh/authorized_keys
+AuthorizedKeysFile	.ssh/authorized_keys
+
+#Specifies a file that lists principal names that are accepted for certificate authentication
+AuthorizedPrincipalsFile none
+
+#Specifies a program to be used to look up the user's public keys
+AuthorizedKeysCommand none
+
+#Specifies the user	under whose account the	AuthorizedKeysCommandis	run
+AuthorizedKeysCommandUser nobody
+
+# Do not use HostbasedAuthentication
+HostbasedAuthentication no
+IgnoreUserKnownHosts no
+
+#Specifies that .rhosts and .shosts files will not be used in RhostsRSAAuthentication or HostbasedAuthentication
+IgnoreRhosts yes
+
+#This is commented because AuthenticationMethods parameter is used. If PasswordAuthentication is set to yes it will not be used because of AuthenticationMethods parameter
+#PasswordAuthentication no
+
+#When password authentication is allowed, it specifies whether the server allows login to accounts with empty password strings
+#PermitEmptyPasswords no
+
+#Specifies whether challenge-response authentication is allowed
+ChallengeResponseAuthentication no
+
+#Kerberos options
+KerberosAuthentication no
+#KerberosOrLocalPasswd yes
+#KerberosTicketCleanup yes
+#KerberosGetAFSToken no
+#KerberosUseKuserok yes
+
+#GSSAPI options
+GSSAPIAuthentication no
+#GSSAPICleanupCredentials no
+#GSSAPIStrictAcceptorCheck yes
+#GSSAPIKeyExchange no
+#GSSAPIEnablek5users no
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+# WARNING: 'UsePAM no' is not supported in Red Hat Enterprise Linux and may cause several
+# problems.
+UsePAM yes
+
+#Specifies whether ssh-agent forwarding is permitted.
+AllowAgentForwarding {{sshd_allow_agent_forwarding}}
+
+#Specifies whether TCP forwarding is permitted
+AllowTcpForwarding {{sshd_allow_tcp_forwarding}}
+
+#Specifies whether remote hosts are allowed to connect to ports forwarded for the client.
+GatewayPorts no
+
+#Specifies whether X11 forwarding is permitted and options
+X11Forwarding no
+#X11DisplayOffset 10
+#X11UseLocalhost yes
+
+#Specifies whether pty allocation is permitted
+PermitTTY yes
+
+#Display MOTD if enabled
+PrintMotd yes
+
+#Specifies whether sshd should print the date and time of the last user login when a user logs in interactively
+PrintLastLog yes
+
+#Specifies the level of verbosity for logging messages from sshd
+LogLevel VERBOSE
+
+#Gives the facility	code that is used when logging messages	from sshd
+SyslogFacility AUTHPRIV
+
+#Do not enable UseLogin - users can get privileged access to the server running sshd
+#UseLogin no
+
+#Specifies whether sshd separates privileges by creating an unprivileged child process to deal with incoming network traffic
+UsePrivilegeSeparation sandbox
+
+#Enabling environment processing may enable users to bypass access restrictions in some configurations using mechanisms such as LD_PRELOAD
+PermitUserEnvironment no
+
+#Specifies whether compression is enabled after the	user has authenticated successfully
+Compression delayed
+
+#Sets a timeout interval in seconds after which if no data has been received from the client, sshd will send a message through the encrypted channel to request a response from the client
+ClientAliveInterval {{sshd_client_alive_interval}}
+
+#Sets the number of client alive messages which may be sent without sshd receiving any messages back from the client. If this threshold is reached while client alive messages are being sent, sshd will disconnect the client
+ClientAliveCountMax {{sshd_client_alive_count_max}}
+
+#Specifies whether the system should send TCP keepalive messages
+TCPKeepAlive no
+
+#Specifies whether sshd will display the patch level of the binary in the identification string
+ShowPatchLevel no
+
+#Specifies whether sshd should look up the remote host name and check that the resolved host name for the remote IP address maps back to the very same IP address
+UseDNS yes
+
+#Specifies the file that contains the process ID of the SSH daemon
+PidFile /var/run/sshd.pid
+
+#Specifies the maximum number of concurrent unauthenticated connections to the SSH daemon
+MaxStartups 10:30:100
+
+#Specifies whether tun device forwarding is allowed
+PermitTunnel no
+
+#Specifies a path to chroot to after authentication
+ChrootDirectory none
+
+# override default of no subsystems
+Subsystem	sftp	/usr/libexec/openssh/sftp-server
+
+#Optionally specifies additional text to append to the SSH protocol banner sent by the server upon connection
+VersionAddendum none
+
+#The contents of the specified file are sent to the remote user before authentication is allowed
+Banner none
+
+# Accept locale-related environment variables
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS

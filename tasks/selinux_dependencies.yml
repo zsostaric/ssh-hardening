@@ -1,0 +1,6 @@
+---
+- name: install selinux dependencies
+  yum:
+    name: policycoreutils-python
+    state: present
+  when: custom_port_and_selinux_enabled == "enabled"

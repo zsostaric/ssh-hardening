@@ -1,0 +1,18 @@
+---
+- name: get latest openssh version
+  include: openssh_update.yml
+  
+- name: check selinux status
+  include: selinux_status.yml
+  
+- name: install selinux dependencies
+  include: selinux_dependencies.yml
+  
+- name: configure selinux
+  include: selinux_configuration.yml
+  
+- name: configure firewall
+  include: firewalld_config.yml
+
+- name: copy sshd_config
+  include: sshd_copy.yml

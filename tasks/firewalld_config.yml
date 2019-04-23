@@ -1,0 +1,8 @@
+---
+- name: open firewall port {{sshd_port}}
+  firewalld:
+    port: "{{sshd_port}}/tcp"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  when: sshd_port != 22

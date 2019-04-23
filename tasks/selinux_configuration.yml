@@ -1,0 +1,8 @@
+---
+- name: setting selinux custom ssh port to {{sshd_port}}
+  seport:
+    ports: "{{sshd_port}}"
+    proto: "tcp"
+    setype: "ssh_port_t"
+    state: "present"
+  when: custom_port_and_selinux_enabled == "enabled"
