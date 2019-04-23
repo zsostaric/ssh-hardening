@@ -1,4 +1,4 @@
-SSH hardening role for Ansible
+Ansible SSH hardening role
 =========
 
 This role will reconfigure the currently installed SSH server (sshd).
